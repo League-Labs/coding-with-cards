@@ -10,8 +10,8 @@ title: Coding With Cards
 description: >
   Learn sorting algorithms by playing with cards.
 author: HTH Endersession
-url: "https://labs.jointheleague.org/coding-with-cards/"
-baseurl: ""
+url: "https://labs.jointheleague.org"
+baseurl: "/coding-with-cards"
 repository:  https://github.com/League-Labs/coding-with-cards
 
 permalink: pretty
