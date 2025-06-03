@@ -7,5 +7,5 @@ Code with Cards!
 
 Here is more explaination about the project. It is a platform for developers to create and share code snippets in a card format, making it easy to browse and use code examples.
 
-* [Bubblesort](/coding-with-cards/bubblesort.html)
-* [Insertionsort](/coding-with-cards/insertionsort.html)
+* [Bubblesort](bubblesort.html)
+* [Insertionsort](insertionsort.html)
