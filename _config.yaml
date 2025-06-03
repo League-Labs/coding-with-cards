@@ -6,16 +6,13 @@ remote_theme: "jekyll/minima@2.5-stable"
 # master branch
 # https://github.com/jekyll/minima/blob/2.5-stable/README.md
 
-title: League Labs
+title: Coding With Cards
 description: >
-  LEAGUE Labs is our unpaid internship program for High School students to
-  develop new LEAGUE classes. LEAGUE Labs Interns will create 90 minute classes,
-  on a subject of their choice, and teach that class to other students in our
-  Tech Club or Code Clinic programs.
-author: The LEAGUE
+  Learn sorting algorithms by playing with cards.
+author: HTH Endersession
 url: "https://labs.jointheleague.org"
 baseurl: ""
-repository:  https://github.com/League-Labs/league-labs.github.io
+repository:  https://github.com/League-Labs/coding-with-cards
 
 permalink: pretty
 
@@ -31,8 +28,8 @@ plugins:
 # If you don't define the nav pages here, the
 # default is to use  all of the pages.
 header_pages:
-- teams/index.md
-- calendar.md
+- bubblesort
+
 
 minima:
 
