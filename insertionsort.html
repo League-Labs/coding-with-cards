@@ -3,70 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bubble Sort with Playing Cards</title>
+    <title>Insertion Sort with Playing Cards</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 1200px;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f0f8ff;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         h1 {
+            color: #333;
             text-align: center;
-            color: #2c3e50;
             margin-bottom: 30px;
-        }
-        
-        .legend {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #333;
-            border-radius: 4px;
         }
         
         .step {
-            margin-bottom: 25px;
-            padding: 15px;
-            background-color: white;
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background-color: #fafafa;
         }
         
         .step-title {
-            font-weight: bold;
             font-size: 18px;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-        
-        .step-description {
+            font-weight: bold;
             margin-bottom: 15px;
-            color: #555;
-            font-style: italic;
+            color: #2c3e50;
         }
         
         .cards {
             display: flex;
             gap: 10px;
             justify-content: center;
-            align-items: center;
-            margin: 10px 0;
+            margin: 15px 0;
         }
         
         .card {
@@ -77,300 +56,263 @@
             justify-content: center;
             font-size: 24px;
             font-weight: bold;
-            border: 3px solid #333;
+            border: 2px solid #333;
             border-radius: 8px;
-            color: #333;
-            background-color: white;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
-        .yellow { background-color: #ffeb3b !important; }
-        .red { background-color: #f44336 !important; color: white; }
-        .blue { background-color: #2196f3 !important; color: white; }
-        .green { background-color: #4caf50 !important; color: white; }
-        
-        .arrow {
-            font-size: 24px;
-            color: #666;
-            margin: 0 10px;
+        .comparing {
+            background-color: #f39c12; /* Yellow - being compared */
         }
         
-        .comparison {
-            text-align: center;
-            margin: 5px 0;
-            font-weight: bold;
-            color: #666;
+        .swapped {
+            background-color: #e74c3c; /* Red - was swapped */
         }
         
-        .final {
-            background-color: #e8f5e8;
-            border: 2px solid #4caf50;
+        .no-swap {
+            background-color: #3498db; /* Blue - compared but not swapped */
+        }
+        
+        .sorted {
+            background-color: #27ae60; /* Green - in final sorted position */
+        }
+        
+        .unsorted {
+            background-color: #95a5a6; /* Gray - not yet processed */
+        }
+        
+        .explanation {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-left: 4px solid #3498db;
+            font-style: italic;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #333;
+            border-radius: 3px;
         }
     </style>
 </head>
 <body>
-    <h1>🃏 Bubble Sort Algorithm with Playing Cards</h1>
-    
-    <div class="legend">
-        <div class="legend-item">
-            <div class="legend-color yellow"></div>
-            <span>Cards being compared</span>
+    <div class="container">
+        <h1>Insertion Sort Algorithm with Playing Cards</h1>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color comparing"></div>
+                <span>Being Compared</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color swapped"></div>
+                <span>Swapped</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color no-swap"></div>
+                <span>Compared, No Swap</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color sorted"></div>
+                <span>Sorted</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color unsorted"></div>
+                <span>Unsorted</span>
+            </div>
         </div>
-        <div class="legend-item">
-            <div class="legend-color red"></div>
-            <span>Cards swapped</span>
+        
+        <div class="step">
+            <div class="step-title">Initial Array</div>
+            <div class="cards">
+                <div class="card sorted">5</div>
+                <div class="card unsorted">2</div>
+                <div class="card unsorted">8</div>
+                <div class="card unsorted">3</div>
+                <div class="card unsorted">6</div>
+            </div>
+            <div class="explanation">
+                Starting with cards: 5, 2, 8, 3, 6. The first element (5) is considered sorted.
+            </div>
         </div>
-        <div class="legend-item">
-            <div class="legend-color blue"></div>
-            <span>Compared, no swap needed</span>
+        
+        <div class="step">
+            <div class="step-title">Step 1: Insert 2</div>
+            <div class="cards">
+                <div class="card comparing">5</div>
+                <div class="card comparing">2</div>
+                <div class="card unsorted">8</div>
+                <div class="card unsorted">3</div>
+                <div class="card unsorted">6</div>
+            </div>
+            <div class="explanation">
+                Compare 2 with 5. Since 2 < 5, we need to swap them.
+            </div>
         </div>
-        <div class="legend-item">
-            <div class="legend-color green"></div>
-            <span>In final sorted position</span>
+        
+        <div class="step">
+            <div class="step-title">Step 1 Result: After inserting 2</div>
+            <div class="cards">
+                <div class="card swapped">2</div>
+                <div class="card swapped">5</div>
+                <div class="card unsorted">8</div>
+                <div class="card unsorted">3</div>
+                <div class="card unsorted">6</div>
+            </div>
+            <div class="explanation">
+                2 is inserted at the beginning. Now 2 and 5 are in sorted order.
+            </div>
         </div>
-    </div>
-
-    <div class="step">
-        <div class="step-title">Initial Array</div>
-        <div class="step-description">Starting with our unsorted cards</div>
-        <div class="cards">
-            <div class="card">5</div>
-            <div class="card">2</div>
-            <div class="card">8</div>
-            <div class="card">3</div>
-            <div class="card">6</div>
+        
+        <div class="step">
+            <div class="step-title">Step 2: Insert 8</div>
+            <div class="cards">
+                <div class="card sorted">2</div>
+                <div class="card comparing">5</div>
+                <div class="card comparing">8</div>
+                <div class="card unsorted">3</div>
+                <div class="card unsorted">6</div>
+            </div>
+            <div class="explanation">
+                Compare 8 with 5. Since 8 > 5, no swap needed. 8 is already in correct position.
+            </div>
         </div>
-    </div>
-
-    <!-- Pass 1 -->
-    <div class="step">
-        <div class="step-title">Pass 1, Step 1: Compare 5 and 2</div>
-        <div class="step-description">5 > 2, so we need to swap them</div>
-        <div class="cards">
-            <div class="card yellow">5</div>
-            <div class="card yellow">2</div>
-            <div class="card">8</div>
-            <div class="card">3</div>
-            <div class="card">6</div>
+        
+        <div class="step">
+            <div class="step-title">Step 2 Result: After inserting 8</div>
+            <div class="cards">
+                <div class="card sorted">2</div>
+                <div class="card no-swap">5</div>
+                <div class="card no-swap">8</div>
+                <div class="card unsorted">3</div>
+                <div class="card unsorted">6</div>
+            </div>
+            <div class="explanation">
+                8 stays in place. Now 2, 5, 8 are in sorted order.
+            </div>
         </div>
-        <div class="comparison">5 > 2 → SWAP</div>
-        <div class="cards">
-            <div class="card red">2</div>
-            <div class="card red">5</div>
-            <div class="card">8</div>
-            <div class="card">3</div>
-            <div class="card">6</div>
+        
+        <div class="step">
+            <div class="step-title">Step 3: Insert 3 - Compare with 8</div>
+            <div class="cards">
+                <div class="card sorted">2</div>
+                <div class="card sorted">5</div>
+                <div class="card comparing">8</div>
+                <div class="card comparing">3</div>
+                <div class="card unsorted">6</div>
+            </div>
+            <div class="explanation">
+                Compare 3 with 8. Since 3 < 8, swap them and continue comparing.
+            </div>
         </div>
-    </div>
-
-    <div class="step">
-        <div class="step-title">Pass 1, Step 2: Compare 5 and 8</div>
-        <div class="step-description">5 < 8, so no swap needed</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card yellow">5</div>
-            <div class="card yellow">8</div>
-            <div class="card">3</div>
-            <div class="card">6</div>
+        
+        <div class="step">
+            <div class="step-title">Step 3: After swapping 3 and 8 - Compare with 5</div>
+            <div class="cards">
+                <div class="card sorted">2</div>
+                <div class="card comparing">5</div>
+                <div class="card comparing">3</div>
+                <div class="card swapped">8</div>
+                <div class="card unsorted">6</div>
+            </div>
+            <div class="explanation">
+                Now compare 3 with 5. Since 3 < 5, swap them and continue.
+            </div>
         </div>
-        <div class="comparison">5 < 8 → NO SWAP</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card blue">5</div>
-            <div class="card blue">8</div>
-            <div class="card">3</div>
-            <div class="card">6</div>
+        
+        <div class="step">
+            <div class="step-title">Step 3: After swapping 3 and 5 - Compare with 2</div>
+            <div class="cards">
+                <div class="card comparing">2</div>
+                <div class="card comparing">3</div>
+                <div class="card swapped">5</div>
+                <div class="card swapped">8</div>
+                <div class="card unsorted">6</div>
+            </div>
+            <div class="explanation">
+                Compare 3 with 2. Since 3 > 2, no more swaps needed. 3 is in correct position.
+            </div>
         </div>
-    </div>
-
-    <div class="step">
-        <div class="step-title">Pass 1, Step 3: Compare 8 and 3</div>
-        <div class="step-description">8 > 3, so we need to swap them</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card">5</div>
-            <div class="card yellow">8</div>
-            <div class="card yellow">3</div>
-            <div class="card">6</div>
+        
+        <div class="step">
+            <div class="step-title">Step 3 Result: After inserting 3</div>
+            <div class="cards">
+                <div class="card no-swap">2</div>
+                <div class="card swapped">3</div>
+                <div class="card swapped">5</div>
+                <div class="card swapped">8</div>
+                <div class="card unsorted">6</div>
+            </div>
+            <div class="explanation">
+                3 is inserted in correct position. Now 2, 3, 5, 8 are in sorted order.
+            </div>
         </div>
-        <div class="comparison">8 > 3 → SWAP</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card">5</div>
-            <div class="card red">3</div>
-            <div class="card red">8</div>
-            <div class="card">6</div>
+        
+        <div class="step">
+            <div class="step-title">Step 4: Insert 6 - Compare with 8</div>
+            <div class="cards">
+                <div class="card sorted">2</div>
+                <div class="card sorted">3</div>
+                <div class="card sorted">5</div>
+                <div class="card comparing">8</div>
+                <div class="card comparing">6</div>
+            </div>
+            <div class="explanation">
+                Compare 6 with 8. Since 6 < 8, swap them and continue comparing.
+            </div>
         </div>
-    </div>
-
-    <div class="step">
-        <div class="step-title">Pass 1, Step 4: Compare 8 and 6</div>
-        <div class="step-description">8 > 6, so we need to swap them</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card">5</div>
-            <div class="card">3</div>
-            <div class="card yellow">8</div>
-            <div class="card yellow">6</div>
+        
+        <div class="step">
+            <div class="step-title">Step 4: After swapping 6 and 8 - Compare with 5</div>
+            <div class="cards">
+                <div class="card sorted">2</div>
+                <div class="card sorted">3</div>
+                <div class="card comparing">5</div>
+                <div class="card comparing">6</div>
+                <div class="card swapped">8</div>
+            </div>
+            <div class="explanation">
+                Compare 6 with 5. Since 6 > 5, no more swaps needed. 6 is in correct position.
+            </div>
         </div>
-        <div class="comparison">8 > 6 → SWAP</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card">5</div>
-            <div class="card">3</div>
-            <div class="card red">6</div>
-            <div class="card green">8</div>
+        
+        <div class="step">
+            <div class="step-title">Final Result: Completely Sorted</div>
+            <div class="cards">
+                <div class="card sorted">2</div>
+                <div class="card sorted">3</div>
+                <div class="card no-swap">5</div>
+                <div class="card swapped">6</div>
+                <div class="card sorted">8</div>
+            </div>
+            <div class="explanation">
+                All cards are now in sorted order: 2, 3, 5, 6, 8. Insertion sort complete!
+            </div>
         </div>
-        <div class="comparison">✅ 8 is now in its final position!</div>
-    </div>
-
-    <!-- Pass 2 -->
-    <div class="step">
-        <div class="step-title">Pass 2, Step 1: Compare 2 and 5</div>
-        <div class="step-description">2 < 5, so no swap needed</div>
-        <div class="cards">
-            <div class="card yellow">2</div>
-            <div class="card yellow">5</div>
-            <div class="card">3</div>
-            <div class="card">6</div>
-            <div class="card green">8</div>
+        
+        <div style="margin-top: 40px; padding: 20px; background-color: #e8f4f8; border-radius: 8px;">
+            <h3>How Insertion Sort Works:</h3>
+            <p>Insertion sort builds the final sorted array one element at a time. It takes each element from the unsorted portion and inserts it into the correct position in the sorted portion by comparing and swapping with elements to its left until it finds its proper place.</p>
+            <p><strong>Time Complexity:</strong> O(n²) in worst case, O(n) in best case (already sorted)</p>
+            <p><strong>Space Complexity:</strong> O(1) - sorts in place</p>
         </div>
-        <div class="comparison">2 < 5 → NO SWAP</div>
-        <div class="cards">
-            <div class="card blue">2</div>
-            <div class="card blue">5</div>
-            <div class="card">3</div>
-            <div class="card">6</div>
-            <div class="card green">8</div>
-        </div>
-    </div>
-
-    <div class="step">
-        <div class="step-title">Pass 2, Step 2: Compare 5 and 3</div>
-        <div class="step-description">5 > 3, so we need to swap them</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card yellow">5</div>
-            <div class="card yellow">3</div>
-            <div class="card">6</div>
-            <div class="card green">8</div>
-        </div>
-        <div class="comparison">5 > 3 → SWAP</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card red">3</div>
-            <div class="card red">5</div>
-            <div class="card">6</div>
-            <div class="card green">8</div>
-        </div>
-    </div>
-
-    <div class="step">
-        <div class="step-title">Pass 2, Step 3: Compare 5 and 6</div>
-        <div class="step-description">5 < 6, so no swap needed</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card">3</div>
-            <div class="card yellow">5</div>
-            <div class="card yellow">6</div>
-            <div class="card green">8</div>
-        </div>
-        <div class="comparison">5 < 6 → NO SWAP</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card">3</div>
-            <div class="card blue">5</div>
-            <div class="card green">6</div>
-            <div class="card green">8</div>
-        </div>
-        <div class="comparison">✅ 6 is now in its final position!</div>
-    </div>
-
-    <!-- Pass 3 -->
-    <div class="step">
-        <div class="step-title">Pass 3, Step 1: Compare 2 and 3</div>
-        <div class="step-description">2 < 3, so no swap needed</div>
-        <div class="cards">
-            <div class="card yellow">2</div>
-            <div class="card yellow">3</div>
-            <div class="card">5</div>
-            <div class="card green">6</div>
-            <div class="card green">8</div>
-        </div>
-        <div class="comparison">2 < 3 → NO SWAP</div>
-        <div class="cards">
-            <div class="card blue">2</div>
-            <div class="card blue">3</div>
-            <div class="card">5</div>
-            <div class="card green">6</div>
-            <div class="card green">8</div>
-        </div>
-    </div>
-
-    <div class="step">
-        <div class="step-title">Pass 3, Step 2: Compare 3 and 5</div>
-        <div class="step-description">3 < 5, so no swap needed</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card yellow">3</div>
-            <div class="card yellow">5</div>
-            <div class="card green">6</div>
-            <div class="card green">8</div>
-        </div>
-        <div class="comparison">3 < 5 → NO SWAP</div>
-        <div class="cards">
-            <div class="card">2</div>
-            <div class="card blue">3</div>
-            <div class="card green">5</div>
-            <div class="card green">6</div>
-            <div class="card green">8</div>
-        </div>
-        <div class="comparison">✅ 5 is now in its final position!</div>
-    </div>
-
-    <!-- Pass 4 -->
-    <div class="step">
-        <div class="step-title">Pass 4, Step 1: Compare 2 and 3</div>
-        <div class="step-description">2 < 3, so no swap needed</div>
-        <div class="cards">
-            <div class="card yellow">2</div>
-            <div class="card yellow">3</div>
-            <div class="card green">5</div>
-            <div class="card green">6</div>
-            <div class="card green">8</div>
-        </div>
-        <div class="comparison">2 < 3 → NO SWAP</div>
-        <div class="cards">
-            <div class="card blue">2</div>
-            <div class="card green">3</div>
-            <div class="card green">5</div>
-            <div class="card green">6</div>
-            <div class="card green">8</div>
-        </div>
-        <div class="comparison">✅ 3 is now in its final position!</div>
-    </div>
-
-    <!-- Final Result -->
-    <div class="step final">
-        <div class="step-title">🎉 Final Sorted Array</div>
-        <div class="step-description">All cards are now in ascending order!</div>
-        <div class="cards">
-            <div class="card green">2</div>
-            <div class="card green">3</div>
-            <div class="card green">5</div>
-            <div class="card green">6</div>
-            <div class="card green">8</div>
-        </div>
-        <div class="comparison">✅ Bubble sort complete! The array is fully sorted.</div>
-    </div>
-
-    <div style="margin-top: 40px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
-        <h3>How Bubble Sort Works:</h3>
-        <p><strong>1.</strong> Compare adjacent elements in the array</p>
-        <p><strong>2.</strong> If they are in the wrong order, swap them</p>
-        <p><strong>3.</strong> Continue through the array until no more swaps are needed</p>
-        <p><strong>4.</strong> After each pass, the largest unsorted element "bubbles up" to its correct position</p>
-        <p><strong>Time Complexity:</strong> O(n²) in worst case, O(n) in best case (already sorted)</p>
-        <p><strong>Space Complexity:</strong> O(1) - sorts in place</p>
     </div>
 </body>
 </html>
