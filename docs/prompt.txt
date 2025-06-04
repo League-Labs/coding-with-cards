@@ -1,0 +1,40 @@
+I want to teach a student the bubble sort, using playing cards. Can you show me
+an example of each step of the algorithm, showing cards that are swapped and not
+swapped, for each step, starting with these cards:
+
+5 2 8 3 6
+
+Lets show the cards that were compared in yellow. If they are swapped, make them
+red. If they were not swapped, blue. And if they are in sorted order, green.
+
+Make this an HTML file, where the number have a colored background to show their
+swap-state.
+
+
+------
+More detailed prompt: 
+
+
+
+I would like to teach students the quicksort, and I want you to produce a sample of a quicksort done with cards. Here is an example that we've done for another sort: 
+
+https://labs.jointheleague.org/coding-with-cards/bubblesort.html
+
+Here is the prompt that generated that example: 
+
+---
+I want to teach a student the bubble sort, using playing cards. Can you show me
+an example of each step of the algorithm, showing cards that are swapped and not
+swapped, for each step, starting with these cards:
+
+5 2 8 3 6
+
+Lets show the cards that were compared in yellow. If they are swapped, make them
+red. If they were not swapped, blue. And if they are in sorted order, green.
+
+Make this an HTML file, where the number have a colored background to show their
+swap-state.
+---
+
+Please give me another html file for a quicksort that has the same style as the previous sort.
+

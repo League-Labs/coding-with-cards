@@ -11,7 +11,7 @@ description: >
   Learn sorting algorithms by playing with cards.
 author: HTH Endersession
 url: "https://labs.jointheleague.org"
-baseurl: ""
+baseurl: "/coding-with-cards"
 repository:  https://github.com/League-Labs/coding-with-cards
 
 permalink: pretty
@@ -27,8 +27,9 @@ plugins:
 
 # If you don't define the nav pages here, the
 # default is to use  all of the pages.
-header_pages:
-- bubblesort
+#header_pages:
+#- bubblesort
+
 
 
 minima:
