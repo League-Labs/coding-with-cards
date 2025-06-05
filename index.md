@@ -9,3 +9,4 @@ Here is more explaination about the project. It is a platform for developers to 
 
 * [Bubblesort](bubblesort.html)
 * [Insertionsort](insertionsort.html)
+* [Timsort](timsort.html)
