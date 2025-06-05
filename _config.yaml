@@ -28,9 +28,8 @@ plugins:
 # If you don't define the nav pages here, the
 # default is to use  all of the pages.
 #header_pages:
-#- bubblesort
-
-
+#- lessons/
+#- worksheets
 
 minima:
 
