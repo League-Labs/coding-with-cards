@@ -3,7 +3,6 @@ layout: page
 title: Quicksort lesson
 ---
 
-
 Quicksort is an efficient way to sort things by breaking the problem down into
 smaller parts. You start by picking a "pivot" card. This can be any card, but
 choosing one near the middle usually works out better. Then, go through the rest
@@ -16,3 +15,6 @@ messy row of cards face up, pick a pivot, and physically move cards to the left
 or right depending on their value. Continue repeating this process for the left
 and right piles until the entire arrangement is in order. It's a cool visual way
 to see a sorting algorithm in action. 
+
+
+<iframe width="700" height="388" src="https://www.youtube.com/embed/3EWDjLC8X-A?si=V7hRJWZ1oJXj7Zh6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
