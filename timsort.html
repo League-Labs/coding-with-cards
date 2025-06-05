@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimSort Algorithm Visualization</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        .step {
+            margin: 25px 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .step-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+        
+        .step-description {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            line-height: 1.5;
+        }
+        
+        .cards {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .card {
+            width: 50px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: white;
+            border-radius: 8px;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        
+        .card.default { background-color: #666; }
+        .card.compared { background-color: #FFD700; color: #333; }
+        .card.swapped { background-color: #FF4444; }
+        .card.not-swapped { background-color: #4444FF; }
+        .card.sorted { background-color: #44AA44; }
+        
+        .controls {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        button {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+        
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .run-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🃏 TimSort Algorithm Visualization</h1>
+        <p class="subtitle">Teaching TimSort with Playing Cards: 6,2,7,8,4,3,5,9,1,10</p>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #666;"></div>
+                <span>Unprocessed</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #FFD700;"></div>
+                <span>Being Compared</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #FF4444;"></div>
+                <span>Swapped</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #4444FF;"></div>
+                <span>Not Swapped</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: #44AA44;"></div>
+                <span>Sorted</span>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="prevStep()" id="prevBtn">← Previous Step</button>
+            <button onclick="nextStep()" id="nextBtn">Next Step →</button>
+            <button onclick="reset()" id="resetBtn">🔄 Reset</button>
+        </div>
+        
+        <div id="visualization"></div>
+    </div>
+
+    <script>
+        const originalArray = [6, 2, 7, 8, 4, 3, 5, 9, 1, 10];
+        let currentStep = 0;
+        let steps = [];
+
+        // TimSort implementation with step tracking
+        function generateTimSortSteps() {
+            steps = [];
+            let arr = [...originalArray];
+            
+            // Initial state
+            steps.push({
+                title: "Initial State",
+                description: "Starting with unsorted cards. TimSort begins by identifying natural runs (sequences that are already sorted).",
+                array: [...arr],
+                states: new Array(arr.length).fill('default'),
+                runInfo: "TimSort is a hybrid sorting algorithm that combines merge sort and insertion sort."
+            });
+
+            // Find initial runs
+            let runs = findRuns(arr);
+            
+            steps.push({
+                title: "Step 1: Identify Natural Runs",
+                description: `TimSort identifies natural runs. Found ${runs.length} runs: ${runs.map(r => `[${r.start}-${r.end}]`).join(', ')}`,
+                array: [...arr],
+                states: arr.map((_, i) => {
+                    for (let run of runs) {
+                        if (i >= run.start && i <= run.end) {
+                            return run.length >= 2 ? 'sorted' : 'compared';
+                        }
+                    }
+                    return 'default';
+                }),
+                runInfo: `Runs: ${runs.map(r => arr.slice(r.start, r.end + 1).join(',')).join(' | ')}`
+            });
+
+            // Ensure minimum run length and sort short runs
+            let processedRuns = [];
+            for (let run of runs) {
+                if (run.length < 32) { // TimSort's MIN_MERGE constant
+                    // Use insertion sort for small runs
+                    let sortSteps = insertionSort(arr, run.start, run.end);
+                    steps.push(...sortSteps);
+                }
+                processedRuns.push(run);
+            }
+
+            // Merge runs
+            while (processedRuns.length > 1) {
+                let mergeSteps = mergeRuns(arr, processedRuns);
+                steps.push(...mergeSteps);
+            }
+
+            // Final sorted state
+            steps.push({
+                title: "Final Result",
+                description: "TimSort complete! All cards are now in sorted order.",
+                array: [...arr],
+                states: new Array(arr.length).fill('sorted'),
+                runInfo: "Sorting completed successfully!"
+            });
+        }
+
+        function findRuns(arr) {
+            let runs = [];
+            let i = 0;
+            
+            while (i < arr.length) {
+                let start = i;
+                
+                if (i < arr.length - 1) {
+                    if (arr[i] <= arr[i + 1]) {
+                        // Ascending run
+                        while (i < arr.length - 1 && arr[i] <= arr[i + 1]) {
+                            i++;
+                        }
+                    } else {
+                        // Descending run - reverse it
+                        while (i < arr.length - 1 && arr[i] > arr[i + 1]) {
+                            i++;
+                        }
+                        // Reverse the descending run
+                        let left = start, right = i;
+                        while (left < right) {
+                            [arr[left], arr[right]] = [arr[right], arr[left]];
+                            left++;
+                            right--;
+                        }
+                    }
+                }
+                
+                runs.push({
+                    start: start,
+                    end: i,
+                    length: i - start + 1
+                });
+                i++;
+            }
+            
+            return runs;
+        }
+
+        function insertionSort(arr, start, end) {
+            let sortSteps = [];
+            
+            for (let i = start + 1; i <= end; i++) {
+                let key = arr[i];
+                let j = i - 1;
+                
+                // Show comparison
+                let states = new Array(arr.length).fill('default');
+                states[i] = 'compared';
+                states[j] = 'compared';
+                
+                sortSteps.push({
+                    title: `Insertion Sort: Compare ${key} with ${arr[j]}`,
+                    description: `Comparing card ${key} at position ${i} with card ${arr[j]} at position ${j}`,
+                    array: [...arr],
+                    states: [...states],
+                    runInfo: `Insertion sorting run from position ${start} to ${end}`
+                });
+                
+                let swapped = false;
+                while (j >= start && arr[j] > key) {
+                    arr[j + 1] = arr[j];
+                    j--;
+                    swapped = true;
+                    
+                    // Show swap
+                    let swapStates = new Array(arr.length).fill('default');
+                    swapStates[j + 1] = 'swapped';
+                    if (j >= start) swapStates[j] = 'swapped';
+                    
+                    sortSteps.push({
+                        title: `Insertion Sort: Shift ${arr[j + 1]}`,
+                        description: `Moving card ${arr[j + 1]} one position to the right`,
+                        array: [...arr],
+                        states: [...swapStates],
+                        runInfo: `Shifting elements to make space for ${key}`
+                    });
+                }
+                
+                arr[j + 1] = key;
+                
+                if (!swapped) {
+                    let noSwapStates = new Array(arr.length).fill('default');
+                    noSwapStates[i] = 'not-swapped';
+                    noSwapStates[j + 1] = 'not-swapped';
+                    
+                    sortSteps.push({
+                        title: `Insertion Sort: No swap needed`,
+                        description: `Card ${key} is already in correct position`,
+                        array: [...arr],
+                        states: [...noSwapStates],
+                        runInfo: `${key} stays at position ${j + 1}`
+                    });
+                }
+            }
+            
+            return sortSteps;
+        }
+
+        function mergeRuns(arr, runs) {
+            let mergeSteps = [];
+            
+            if (runs.length < 2) return mergeSteps;
+            
+            // Simple merge of first two runs for demonstration
+            let run1 = runs[0];
+            let run2 = runs[1];
+            
+            let left = arr.slice(run1.start, run1.end + 1);
+            let right = arr.slice(run2.start, run2.end + 1);
+            let merged = [];
+            let i = 0, j = 0;
+            let pos = run1.start;
+            
+            while (i < left.length && j < right.length) {
+                let states = new Array(arr.length).fill('default');
+                states[run1.start + i] = 'compared';
+                states[run2.start + j] = 'compared';
+                
+                mergeSteps.push({
+                    title: `Merge: Compare ${left[i]} and ${right[j]}`,
+                    description: `Comparing ${left[i]} from first run with ${right[j]} from second run`,
+                    array: [...arr],
+                    states: [...states],
+                    runInfo: `Merging runs: [${left.join(',')}] and [${right.join(',')}]`
+                });
+                
+                if (left[i] <= right[j]) {
+                    merged.push(left[i]);
+                    arr[pos] = left[i];
+                    i++;
+                } else {
+                    merged.push(right[j]);
+                    arr[pos] = right[j];
+                    j++;
+                }
+                pos++;
+            }
+            
+            // Copy remaining elements
+            while (i < left.length) {
+                merged.push(left[i]);
+                arr[pos] = left[i];
+                i++;
+                pos++;
+            }
+            
+            while (j < right.length) {
+                merged.push(right[j]);
+                arr[pos] = right[j];
+                j++;
+                pos++;
+            }
+            
+            // Update runs array
+            runs[0] = {
+                start: run1.start,
+                end: run2.end,
+                length: run2.end - run1.start + 1
+            };
+            runs.splice(1, 1);
+            
+            let finalStates = new Array(arr.length).fill('default');
+            for (let k = run1.start; k <= run2.end; k++) {
+                finalStates[k] = 'sorted';
+            }
+            
+            mergeSteps.push({
+                title: "Merge Complete",
+                description: `Successfully merged two runs into one sorted sequence: [${merged.join(',')}]`,
+                array: [...arr],
+                states: [...finalStates],
+                runInfo: `New merged run: [${merged.join(',')}]`
+            });
+            
+            return mergeSteps;
+        }
+
+        function renderStep(stepIndex) {
+            const step = steps[stepIndex];
+            const visualization = document.getElementById('visualization');
+            
+            visualization.innerHTML = `
+                <div class="step">
+                    <div class="step-title">${step.title}</div>
+                    <div class="step-description">${step.description}</div>
+                    <div class="run-info">${step.runInfo}</div>
+                    <div class="cards">
+                        ${step.array.map((card, index) => 
+                            `<div class="card ${step.states[index]}">${card}</div>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = stepIndex === 0;
+            document.getElementById('nextBtn').disabled = stepIndex === steps.length - 1;
+        }
+
+        function nextStep() {
+            if (currentStep < steps.length - 1) {
+                currentStep++;
+                renderStep(currentStep);
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                renderStep(currentStep);
+            }
+        }
+
+        function reset() {
+            currentStep = 0;
+            renderStep(currentStep);
+        }
+
+        // Initialize
+        generateTimSortSteps();
+        renderStep(0);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextStep();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevStep();
+            } else if (e.key === 'r' || e.key === 'R') {
+                reset();
+            }
+        });
+    </script>
+</body>
+</html>
